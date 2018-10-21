@@ -22,8 +22,7 @@
     "release": "npm run release:git && npm run release:npm",
     "postrelease": "npm run gh-pages",
     "gh-pages": "npm run build:clean && npm run build:demo && npm run compodoc && ngh --dir=dist/demo && npm run build:clean",
-    "install": "npm run build:lib",
-    "prepare": "npm run build:lib"
+    "prepare": "npm install && npm run build:lib"
   },
   "repository": {
     "type": "git",
