@@ -60,6 +60,7 @@ export interface DragEndEvent extends Coordinates {
 }
 
 export type ValidateDrag = (coordinates: Coordinates) => boolean;
+export type LimitDrag = (coordinates: Coordinates) => Coordinates;
 
 export interface PointerEvent {
   clientX: number;
@@ -106,6 +107,13 @@ export class DraggableDirective implements OnInit, OnChanges, OnDestroy {
    */
   @Input()
   validateDrag: ValidateDrag;
+  
+  /**
+   * Allow custom behaviour to control when the element is dragged with the 
+   * ability to affect the drag position
+   */
+  @Input()
+  limitDrag: LimitDrag;
 
   /**
    * The cursor to use when dragging the element
@@ -315,6 +323,17 @@ export class DraggableDirective implements OnInit, OnChanges, OnDestroy {
               y: moveData.transformY + scrollY
             };
           }),
+          map(moveData => {
+            let finalCoordinates : Coordinates = {x: moveData.x, y: moveData.y};
+            if (this.limitDrag) {
+              finalCoordinates = this.limitDrag(moveData);
+            }
+            return {
+              ...moveData,
+              x: finalCoordinates.x,
+              y: finalCoordinates.y
+            }
+          })
           filter(
             ({ x, y }) => !this.validateDrag || this.validateDrag({ x, y })
           ),
