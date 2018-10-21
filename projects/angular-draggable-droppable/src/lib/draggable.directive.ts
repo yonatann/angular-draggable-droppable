@@ -107,9 +107,9 @@ export class DraggableDirective implements OnInit, OnChanges, OnDestroy {
    */
   @Input()
   validateDrag: ValidateDrag;
-  
+
   /**
-   * Allow custom behaviour to control when the element is dragged with the 
+   * Allow custom behaviour to control when the element is dragged with the
    * ability to affect the drag position
    */
   @Input()
@@ -324,7 +324,10 @@ export class DraggableDirective implements OnInit, OnChanges, OnDestroy {
             };
           }),
           map(moveData => {
-            let finalCoordinates : Coordinates = {x: moveData.x, y: moveData.y};
+            let finalCoordinates: Coordinates = {
+              x: moveData.x,
+              y: moveData.y
+            };
             if (this.limitDrag) {
               finalCoordinates = this.limitDrag(moveData);
             }
@@ -332,8 +335,8 @@ export class DraggableDirective implements OnInit, OnChanges, OnDestroy {
               ...moveData,
               x: finalCoordinates.x,
               y: finalCoordinates.y
-            }
-          })
+            };
+          }),
           filter(
             ({ x, y }) => !this.validateDrag || this.validateDrag({ x, y })
           ),
